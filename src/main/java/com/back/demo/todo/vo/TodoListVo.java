@@ -15,4 +15,18 @@ public class TodoListVo {
     private String text;
 
     private boolean checked;
+
+    public Boolean prodChecked(String checked){
+        if("F".equals(checked))
+            return false;
+        else
+            return true;
+    }
+
+    public String consChecked(boolean checked){
+        if(checked)
+            return "T";
+        else
+            return "F";
+    }
 }

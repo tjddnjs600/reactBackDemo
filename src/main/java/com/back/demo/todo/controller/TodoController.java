@@ -22,8 +22,21 @@ public class TodoController {
     }
 
     @PostMapping("/insertList")
-    public List<TodoListVo> insertList(@RequestBody String text){
-        log.debug(text);
-        return this.todoService.selectList();
+    public TodoListVo insertList(@RequestBody TodoListVo todoListVo){
+        log.debug(todoListVo.toString());
+        return this.todoService.insertTodo(todoListVo);
+    }
+
+    @PostMapping("/deleteList")
+    public String deleteList(@RequestBody TodoListVo todoListVo){
+        log.debug(todoListVo.toString());
+        String res;
+        try {
+            res = this.todoService.deleteList(todoListVo);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return res;
     }
 }
