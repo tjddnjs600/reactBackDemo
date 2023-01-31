@@ -16,6 +16,8 @@ public class TodoListVo {
 
     private boolean checked;
 
+    private String user_id;
+
     public Boolean prodChecked(String checked){
         if("F".equals(checked))
             return false;

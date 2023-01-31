@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,11 +22,16 @@ public class TodoServiceImpl implements TodoService {
 
     private TodoRepository todoRepository;
 
+    private HttpSession httpSession;
+
     @Override
     public List<TodoListVo> selectList() {
         List<TodoListVo> list = new ArrayList<>();
 
+        String id = httpSession.getAttribute("loginId").toString();
+
         List<TodoEntity> selectList = this.todoRepository.findAll().stream()
+                .filter(item -> id.equals(item.getUser_id()))
                 .map(todo -> {
                     TodoListVo vo = new TodoListVo();
                     vo.setId(String.valueOf(todo.getId()));
@@ -50,7 +56,8 @@ public class TodoServiceImpl implements TodoService {
 
         return new TodoListVo(String.valueOf(entity.getId())
                             , entity.getText()
-                            , todoListVo.prodChecked(entity.getChecked()));
+                            , todoListVo.prodChecked(entity.getChecked())
+                            , entity.getUser_id());
     }
 
     @Override
@@ -63,9 +70,13 @@ public class TodoServiceImpl implements TodoService {
     }
 
     private TodoEntity setTodoEntity(TodoListVo todoListVo){
+
+        String id = httpSession.getAttribute("loginId").toString();
+
         TodoEntity entity = new TodoEntity();
         entity.setText(todoListVo.getText());
         entity.setChecked(todoListVo.consChecked(todoListVo.isChecked()));
+        entity.setUser_id(id);
         return entity;
     }
 }

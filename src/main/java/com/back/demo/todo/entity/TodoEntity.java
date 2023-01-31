@@ -18,4 +18,6 @@ public class TodoEntity {
     private String text;
 
     private String checked;
+
+    private String user_id;
 }
